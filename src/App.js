@@ -1,25 +1,96 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {Component} from 'react';
+import styles from './App.module.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import Form from './components/form/form';
+
+class App extends Component {
+    state = {
+        name: '',
+        surname: '',
+        age: '',
+        email: '',
+        hobby: '',
+        nameError: false,
+        surnameError: false,
+        ageError: false,
+        emailError: false,
+        hobbyError: false
+    }
+
+    componentDidUpdate() {
+        console.log(this.state)
+    }
+
+    inputsHandler = (e, type) => {
+        this.setState({
+            [type]: e.target.value
+        })
+    }
+
+    submitHandler = (e) => {
+        let {
+                nameError, surnameError, ageError, emailError, hobbyError,
+                name, surname, age, email, hobby
+            } = this.state
+        if (!(/^[a-zA-Z]{2,}$/.test(name))) {
+            nameError = true
+        }
+        if (!(/^[a-zA-Z]{2,}$/.test(surname))) {
+            surnameError = true
+        }
+        if (!(/^\d{1,2}$/.test(age))) {
+            ageError = true
+        }
+        if (!(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(email))) {
+            emailError = true
+        }
+        if (!hobby.length) {
+            hobbyError = true
+        }
+
+        if ([nameError, surnameError, ageError, emailError, hobbyError].every(err => !err)) {
+            localStorage.setItem('data', JSON.stringify({name, surname, age, email, hobby}))
+            return
+        }
+
+        this.setState({
+            nameError,
+            surnameError,
+            ageError,
+            emailError,
+            hobbyError
+        })
+
+    }
+
+    resetInputHandler = (e,type) => {
+        if (this.state[type+'Error']) {
+            e.target.value = ''
+            this.setState({[type]: '', [type+'Error']: false})
+        }
+    }
+
+    render() {
+        const {nameError, surnameError, ageError, emailError, hobbyError} = this.state
+        return (
+            <>
+                <h3 className={styles.Header}>Dummy Form )</h3>
+                <div className={styles.App}>
+                    <Form inputsHandler={this.inputsHandler}
+                        errors={{
+                            name: nameError,
+                            surname: surnameError,
+                            age: ageError,
+                            email: emailError,
+                            hobby: hobbyError
+                        }}
+                        submitting={this.submitHandler}
+                        resetting={this.resetInputHandler}
+                     />
+                </div>
+            </>
+          )
+    }
 }
 
 export default App;
