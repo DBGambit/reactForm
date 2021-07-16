@@ -17,7 +17,7 @@ const Input = ({label, typeHTML, onChanging, type, error, resetting}) => {
             </div>
             {
                 error ?
-                <InputError txt='Wrong Input' />
+                <InputError txt={`Wrong ${type} Input`} />
                 : null
             }
             </>
