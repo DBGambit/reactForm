@@ -3,8 +3,7 @@ import styles from './Input.module.css';
 
 import InputError from '../inputError/inputError';
 
-const Input = ({label, typeHTML, onChanging, type, error, resetting}) => {
-    let data = localStorage.getItem('data') ? JSON.parse(localStorage.getItem('data')) : null
+const Input = ({label, typeHTML, onChanging, type, error, resetting, saved}) => {
     return (
             <>
             <div className={styles.InputWrapper}>
@@ -12,7 +11,7 @@ const Input = ({label, typeHTML, onChanging, type, error, resetting}) => {
                 <input className={styles.Input} type={typeHTML}
                     onChange={(e) => onChanging(e,type)}
                     onClick={(e) => resetting(e,type)}
-                    placeholder={data ? data[type] : ''}
+                    value={saved}
                  />
             </div>
             {

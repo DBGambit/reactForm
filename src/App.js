@@ -2,14 +2,11 @@ import React, {Component} from 'react';
 import styles from './App.module.css';
 
 import Form from './components/form/form';
+import initialInputs from './getDataFromLS';
 
 class App extends Component {
     state = {
-        name: '',
-        surname: '',
-        age: '',
-        email: '',
-        hobby: '',
+        ...initialInputs,
         nameError: false,
         surnameError: false,
         ageError: false,
@@ -17,8 +14,8 @@ class App extends Component {
         hobbyError: false
     }
 
-    componentDidUpdate() {
-        console.log(this.state)
+    componentDidMount() {
+        console.log('mount',this.state)
     }
 
     inputsHandler = (e, type) => {
@@ -50,6 +47,7 @@ class App extends Component {
 
         if ([nameError, surnameError, ageError, emailError, hobbyError].every(err => !err)) {
             localStorage.setItem('data', JSON.stringify({name, surname, age, email, hobby}))
+            alert('SAVED')
             return
         }
 
@@ -60,7 +58,6 @@ class App extends Component {
             emailError,
             hobbyError
         })
-
     }
 
     resetInputHandler = (e,type) => {
@@ -72,6 +69,7 @@ class App extends Component {
 
     render() {
         const {nameError, surnameError, ageError, emailError, hobbyError} = this.state
+        const {name, surname, age, email, hobby} = this.state
         return (
             <>
                 <h3 className={styles.Header}>Dummy Form )</h3>
@@ -84,6 +82,7 @@ class App extends Component {
                             email: emailError,
                             hobby: hobbyError
                         }}
+                        saved={{name, surname, age, email, hobby}}
                         submitting={this.submitHandler}
                         resetting={this.resetInputHandler}
                      />
